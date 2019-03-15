@@ -1,0 +1,14 @@
+{
+  "manifest_version": 2,
+  "name": "wongco",
+  "description": "Flipwat Extension for viewing flashcards.",
+  "version": "1",
+  "author": "Ginson Wong",
+  "browser_action": {
+    "default_title": "Review!"
+  },
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  "permissions": ["activeTab"]
+}
