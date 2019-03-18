@@ -388,7 +388,6 @@ body {
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
-  border: 1px solid blue;
 }
 
 .text--labels {
