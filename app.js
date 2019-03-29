@@ -60,9 +60,14 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // randomItem
-  randomButton.addEventListener('click', () => {
-    currIdx = Math.floor(Math.random() * TestQuestionsArray.length);
-    updateQuestionToDom(TestQuestionsArray[currIdx]);
+  randomButton.addEventListener('click', async () => {
+    // currIdx = Math.floor(Math.random() * TestQuestionsArray.length);
+    const apiResponse = await axios({
+      method: 'get',
+      url: 'http://localhost:5000/cards/random'
+    });
+    const { card } = apiResponse.data;
+    updateQuestionToDom(card);
   });
 
   // randomItem

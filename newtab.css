@@ -352,12 +352,13 @@ template {
 /* End Normalize CSS */
 
 body {
-  height: 100vh;
-  width: 100vw;
+  width: 99vw;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  margin-top: 2em;
+  background-color: #419871;
 }
 
 .quiz--container {
@@ -367,11 +368,11 @@ body {
   height: 80%;
   width: 80%;
   border-radius: 20px;
-  padding-left: 100px;
-  padding-right: 100px;
-  background-color: #419871;
-  box-shadow: 5px 5px 18px green;
-  font-size: 6em;
+  padding: 1em 100px;
+  /* box-shadow: 5px 5px 18px green; */
+  font-size: 2.5em;
+  font-weight: 300;
+  line-height: 1.5em;
 }
 
 .category--container {
@@ -379,6 +380,9 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 2em;
+  margin-bottom: 0.25em;
+  margin-top: 0.5em;
+  font-weight: 500;
 }
 
 .question--container,
@@ -388,6 +392,11 @@ body {
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
+  margin: 1em 0;
+}
+
+.question--container {
+  font-size: 1.5em;
 }
 
 .text--labels {
@@ -397,7 +406,8 @@ body {
 .control--container {
   display: flex;
   justify-content: space-around;
-  width: 50%;
+  width: 100%;
+  margin: 0.5em;
 }
 
 button {
@@ -406,7 +416,7 @@ button {
   box-shadow: 0px 5px 18px skyblue;
   color: gray;
   width: 300px;
-  font-size: 2vw;
+  font-size: 1.5vw;
 }
 
 button:hover {
