@@ -3,11 +3,14 @@ document.addEventListener('DOMContentLoaded', function() {
   const questionNode = document.querySelector('#question');
   const categoryNode = document.querySelector('#category');
   const answerNode = document.querySelector('#answer');
-
   const prevButton = document.querySelector('#prev--button');
   const nextButton = document.querySelector('#next--button');
   const randomButton = document.querySelector('#random--button');
   const answerButton = document.querySelector('#answer--button');
+
+  let state = {
+    id: undefined
+  };
 
   /** Test Question Data */
   const TestQuestionsArray = [
@@ -45,34 +48,59 @@ document.addEventListener('DOMContentLoaded', function() {
     categoryNode.innerHTML = category;
   }
 
-  // Event Handlers
+  /** Maintains Application State */
+  function setState(newState) {
+    state = { ...newState };
+  }
 
-  // prevItem
-  prevButton.addEventListener('click', () => {
-    currIdx = currIdx === 0 ? TestQuestionsArray.length - 1 : currIdx - 1;
-    updateQuestionToDom(TestQuestionsArray[currIdx]);
-  });
+  /** Gets Specific Card from backend API */
+  async function getSpecificCard(nextId) {
+    const apiResponse = await axios({
+      method: 'get',
+      url: `http://localhost:5000/cards/${nextId}`
+    });
+    const { card } = apiResponse.data;
+    const { id } = card;
+    setState({ id });
+    updateQuestionToDom(card);
+  }
 
-  // nextItem
-  nextButton.addEventListener('click', () => {
-    currIdx = currIdx === TestQuestionsArray.length - 1 ? 0 : currIdx + 1;
-    updateQuestionToDom(TestQuestionsArray[currIdx]);
-  });
+  /** Action Handlers - Bound to Event Listeners */
+  /** Previous Question */
+  async function prevQuestion() {
+    const nextId = state.id - 1;
+    getSpecificCard(nextId);
+  }
 
-  // randomItem
-  randomButton.addEventListener('click', async () => {
-    // currIdx = Math.floor(Math.random() * TestQuestionsArray.length);
+  /** Next Question */
+  async function nextQuestion() {
+    const nextId = state.id + 1;
+    getSpecificCard(nextId);
+  }
+
+  /** Random Question */
+  async function randomQuestion() {
     const apiResponse = await axios({
       method: 'get',
       url: 'http://localhost:5000/cards/random'
     });
     const { card } = apiResponse.data;
+    const { id } = card;
+    setState({ id });
     updateQuestionToDom(card);
-  });
+  }
 
-  // randomItem
-  answerButton.addEventListener('click', () => {
-    // show answer that was previously hidden
-    console.log('show answer!');
-  });
+  /** Toggle Answer Button */
+  function toggleAnswer() {
+    // todo code to show/hide answer element
+  }
+
+  /** Event Handlers for Buttons */
+  prevButton.addEventListener('click', prevQuestion);
+  nextButton.addEventListener('click', nextQuestion);
+  randomButton.addEventListener('click', randomQuestion);
+  answerButton.addEventListener('click', toggleAnswer);
+
+  // make api call and pull random question
+  randomQuestion();
 });
