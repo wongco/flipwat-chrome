@@ -352,13 +352,15 @@ template {
 /* End Normalize CSS */
 
 body {
+  min-width: 1400px;
   width: 99vw;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   margin-top: 2em;
-  background-color: #419871;
+  outline: none;
+  background-color: #f0f5f5;
 }
 
 .quiz--container {
@@ -369,10 +371,8 @@ body {
   width: 80%;
   border-radius: 20px;
   padding: 1em 100px;
-  /* box-shadow: 5px 5px 18px green; */
   font-size: 2.5em;
   font-weight: 300;
-  line-height: 1.5em;
 }
 
 .category--container {
@@ -385,7 +385,16 @@ body {
   font-weight: 500;
 }
 
-.question--container,
+.question--container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin: 1em 0;
+  line-height: 1.5em;
+}
+
 .answer--container {
   width: 100%;
   display: flex;
@@ -393,6 +402,7 @@ body {
   justify-content: flex-start;
   align-items: flex-start;
   margin: 1em 0;
+  line-height: 1.5em;
 }
 
 .question--container {
@@ -408,18 +418,35 @@ body {
   justify-content: space-around;
   width: 100%;
   margin: 0.5em;
+  margin-bottom: 1em;
 }
 
 button {
   border-radius: 10px;
   background-color: skyblue;
-  box-shadow: 0px 5px 18px skyblue;
+  box-shadow: 0px 5px 10px skyblue;
   color: gray;
-  width: 300px;
-  font-size: 1.5vw;
+  width: 200px;
+  font-size: 1em;
+  outline: none;
+}
+
+.answer-on {
+  background-color: lightseagreen;
+  color: white;
+  box-shadow: 0px 5px 10px lightseagreen;
+}
+
+.answer-on:hover {
+  background-color: blue;
+  box-shadow: 0px 5px 10px blue;
 }
 
 button:hover {
   background-color: blue;
   color: white;
+}
+
+.hide {
+  display: none;
 }

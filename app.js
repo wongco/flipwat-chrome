@@ -7,62 +7,16 @@ document.addEventListener('DOMContentLoaded', function() {
   const nextButton = document.querySelector('#next--button');
   const randomButton = document.querySelector('#random--button');
   const answerButton = document.querySelector('#answer--button');
+  const BASE_URL = 'http://localhost:5000';
 
   let state = {
-    id: undefined
+    id: undefined,
+    showAnswer: false
   };
-
-  /** Test Question Data */
-  const TestQuestionsArray = [
-    {
-      id: 0,
-      category: 'HTML Foundation',
-      question: 'What is CSS?',
-      answer:
-        'A language used to modify the elements on a page with display attributes.'
-    },
-    {
-      id: 1,
-      category: 'HTML Foundation',
-      question: 'What is HTML?',
-      answer: 'A markup language for displaying information in the web browser.'
-    },
-    {
-      id: 2,
-      category: 'Framework',
-      question: 'What is React?',
-      answer:
-        'A popular web frontend framework for building web applications created by Facebook.'
-    }
-  ];
-
-  // preload first random Question
-  let currIdx = Math.floor(Math.random() * TestQuestionsArray.length);
-  let currentQuestion = TestQuestionsArray[currIdx];
-  updateQuestionToDom(currentQuestion);
-
-  /** Updates DOM with input question and answer */
-  function updateQuestionToDom({ question, answer, category }) {
-    questionNode.innerHTML = question;
-    answerNode.innerHTML = answer;
-    categoryNode.innerHTML = category;
-  }
 
   /** Maintains Application State */
   function setState(newState) {
-    state = { ...newState };
-  }
-
-  /** Gets Specific Card from backend API */
-  async function getSpecificCard(nextId) {
-    const apiResponse = await axios({
-      method: 'get',
-      url: `http://localhost:5000/cards/${nextId}`
-    });
-    const { card } = apiResponse.data;
-    const { id } = card;
-    setState({ id });
-    updateQuestionToDom(card);
+    state = { ...state, ...newState };
   }
 
   /** Action Handlers - Bound to Event Listeners */
@@ -78,11 +32,23 @@ document.addEventListener('DOMContentLoaded', function() {
     getSpecificCard(nextId);
   }
 
+  /** Gets Specific Card from backend API */
+  async function getSpecificCard(nextId) {
+    const apiResponse = await axios({
+      method: 'get',
+      url: `${BASE_URL}/cards/${nextId}`
+    });
+    const { card } = apiResponse.data;
+    const { id } = card;
+    setState({ id });
+    updateQuestionToDom(card);
+  }
+
   /** Random Question */
   async function randomQuestion() {
     const apiResponse = await axios({
       method: 'get',
-      url: 'http://localhost:5000/cards/random'
+      url: `${BASE_URL}/cards/random`
     });
     const { card } = apiResponse.data;
     const { id } = card;
@@ -92,7 +58,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
   /** Toggle Answer Button */
   function toggleAnswer() {
-    // todo code to show/hide answer element
+    answerNode.classList.toggle('hide');
+    answerButton.classList.toggle('answer-on');
+    setState({
+      showAnswer: !state.showAnswer
+    });
+    if (state.showAnswer) {
+      answerButton.innerHTML = 'Answers Off';
+      // answerButton.classList.remove('answer-on');
+    } else {
+      answerButton.innerHTML = 'Answers On';
+      // answerButton.classList.add('answer-on');
+    }
+  }
+
+  /** Updates DOM with input question and answer */
+  function updateQuestionToDom({ question, answer, category }) {
+    questionNode.innerHTML = question;
+    answerNode.innerHTML = answer;
+    categoryNode.innerHTML = category;
   }
 
   /** Event Handlers for Buttons */
