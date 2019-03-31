@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const nextButton = document.querySelector('#next--button');
   const randomButton = document.querySelector('#random--button');
   const answerButton = document.querySelector('#answer--button');
-  const BASE_URL = 'http://localhost:5000';
+  const BASE_URL = 'https://flipwat-wongco-api.herokuapp.com';
+  // const BASE_URL = 'http://localhost:5000'; - use this server for local api testing
 
   let state = {
     id: undefined,
@@ -23,37 +24,46 @@ document.addEventListener('DOMContentLoaded', function() {
   /** Previous Question */
   async function prevQuestion() {
     const nextId = state.id - 1;
-    getSpecificCard(nextId);
+    const cardData = await getSpecificCardData(nextId);
+    updateCard(cardData);
   }
 
   /** Next Question */
   async function nextQuestion() {
     const nextId = state.id + 1;
-    getSpecificCard(nextId);
-  }
-
-  /** Gets Specific Card from backend API */
-  async function getSpecificCard(nextId) {
-    const apiResponse = await axios({
-      method: 'get',
-      url: `${BASE_URL}/cards/${nextId}`
-    });
-    const { card } = apiResponse.data;
-    const { id } = card;
-    setState({ id });
-    updateQuestionToDom(card);
+    const cardData = await getSpecificCardData(nextId);
+    updateCard(cardData);
   }
 
   /** Random Question */
   async function randomQuestion() {
+    const cardData = await getRandomCardData();
+    updateCard(cardData);
+  }
+
+  /** Gets Specific Card from backend API */
+  async function getSpecificCardData(nextId) {
+    const apiResponse = await axios({
+      method: 'get',
+      url: `${BASE_URL}/cards/${nextId}`
+    });
+    return apiResponse.data.card;
+  }
+
+  /** Random Question */
+  async function getRandomCardData() {
     const apiResponse = await axios({
       method: 'get',
       url: `${BASE_URL}/cards/random`
     });
-    const { card } = apiResponse.data;
-    const { id } = card;
+    return apiResponse.data.card;
+  }
+
+  /** takes card data and updates state and dom */
+  function updateCard(cardData) {
+    const { id, question, answer, category } = cardData;
     setState({ id });
-    updateQuestionToDom(card);
+    updateQuestionToDom({ question, answer, category });
   }
 
   /** Toggle Answer Button */
@@ -63,13 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setState({
       showAnswer: !state.showAnswer
     });
-    if (state.showAnswer) {
-      answerButton.innerHTML = 'Answers Off';
-      // answerButton.classList.remove('answer-on');
-    } else {
-      answerButton.innerHTML = 'Answers On';
-      // answerButton.classList.add('answer-on');
-    }
+    answerButton.innerHTML = `Answers ${state.showAnswer ? 'Off' : 'On'}`;
   }
 
   /** Updates DOM with input question and answer */
@@ -79,12 +83,12 @@ document.addEventListener('DOMContentLoaded', function() {
     categoryNode.innerHTML = category;
   }
 
-  /** Event Handlers for Buttons */
+  /** Register Event Handlers for Buttons */
   prevButton.addEventListener('click', prevQuestion);
   nextButton.addEventListener('click', nextQuestion);
   randomButton.addEventListener('click', randomQuestion);
   answerButton.addEventListener('click', toggleAnswer);
 
-  // make api call and pull random question
+  // make api call and pull random question to start
   randomQuestion();
 });
