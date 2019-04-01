@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // cache DOMLookups
   const questionNode = document.querySelector('#question');
   const categoryNode = document.querySelector('#category');
+  const loadingNode = document.querySelector('#loading--notice');
   const answerNode = document.querySelector('#answer');
   const prevButton = document.querySelector('#prev--button');
   const nextButton = document.querySelector('#next--button');
@@ -23,22 +24,28 @@ document.addEventListener('DOMContentLoaded', function() {
   /** Action Handlers - Bound to Event Listeners */
   /** Previous Question */
   async function prevQuestion() {
+    toggleLoading();
     const nextId = state.id - 1;
     const cardData = await getSpecificCardData(nextId);
     updateCard(cardData);
+    toggleLoading();
   }
 
   /** Next Question */
   async function nextQuestion() {
+    toggleLoading();
     const nextId = state.id + 1;
     const cardData = await getSpecificCardData(nextId);
     updateCard(cardData);
+    toggleLoading();
   }
 
   /** Random Question */
   async function randomQuestion() {
+    toggleLoading();
     const cardData = await getRandomCardData();
     updateCard(cardData);
+    toggleLoading();
   }
 
   /** Gets Specific Card from backend API */
@@ -74,6 +81,11 @@ document.addEventListener('DOMContentLoaded', function() {
       showAnswer: !state.showAnswer
     });
     answerButton.innerHTML = `Answers ${state.showAnswer ? 'Off' : 'On'}`;
+  }
+
+  /** Toggle Loading Indicator */
+  function toggleLoading() {
+    loadingNode.classList.toggle('hide');
   }
 
   /** Updates DOM with input question and answer */
