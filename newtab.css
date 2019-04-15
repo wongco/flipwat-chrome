@@ -352,6 +352,7 @@ template {
 /* End Normalize CSS */
 
 body {
+  font-family: 'Lato', sans-serif;
   min-width: 1400px;
   width: 99vw;
   display: flex;
